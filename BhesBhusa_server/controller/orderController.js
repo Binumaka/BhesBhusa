@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const Order = require("../model/checkoutModel");
 const Clothes = require("../model/clothesModel");
 const Stripe = require("stripe");
+const logActivity = require('../controller/activitylogController')
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 // Create new order from cart
@@ -54,6 +55,16 @@ const createOrder = async (req, res) => {
     });
 
     await order.save();
+
+    await logActivity({
+      req,
+      userId,
+      action: "CREATED_ORDER",
+      details: {
+        username: userId.username,
+        email: userId.email,
+      },
+    });
 
     res.status(201).json({ message: "Order placed successfully", order });
   } catch (err) {
@@ -128,6 +139,16 @@ const cancelOrder = async (req, res) => {
     order.status = "CANCELLED";
     await order.save();
 
+    await logActivity({
+      req,
+      userId: user._id,
+      action: "CANCELLED_ORDER",
+      details: {
+        username: user.username,
+        email: user.email,
+      },
+    });
+
     res.status(200).json({ message: "Order cancelled successfully", order });
   } catch (err) {
     res
@@ -180,6 +201,16 @@ const statusupdate = async (req, res) => {
       return res.status(404).json({ error: "Order not found" });
     }
 
+    await logActivity({
+      req,
+      userId: user._id,
+      action: "STATUS_UPDATED",
+      details: {
+        username: user.username,
+        email: user.email,
+      },
+    });
+
     res.status(200).json(updatedOrder);
   } catch (err) {
     console.error("Error updating status:", err);
@@ -209,15 +240,16 @@ const createCheckoutSession = async (req, res) => {
 
     // Create Stripe checkout session
     const session = await stripe.checkout.sessions.create({
-  payment_method_types: ["card"],
-  line_items,
-  mode: "payment",
-  success_url: "https://localhost:5173/success?session_id=cs_test_b13mCwVFnA6JcHXb3C5kF32Xk86pAHH6MOuIpynGrx2agz2VEpbGg775Gu",
-  cancel_url: "https://localhost:5173/payment-cancel",
-  metadata: {
-    orderId: orderId,
-  },
-});
+      payment_method_types: ["card"],
+      line_items,
+      mode: "payment",
+      success_url:
+        "https://localhost:5173/success?session_id=cs_test_b13mCwVFnA6JcHXb3C5kF32Xk86pAHH6MOuIpynGrx2agz2VEpbGg775Gu",
+      cancel_url: "https://localhost:5173/payment-cancel",
+      metadata: {
+        orderId: orderId,
+      },
+    });
 
     res.status(200).json({ id: session.id });
   } catch (error) {
@@ -257,13 +289,22 @@ const stripeWebhook = async (req, res) => {
     try {
       const updatedOrder = await Order.findByIdAndUpdate(
         orderId,
-        { paymentStatus: "PAID", status: "CONFIRMED" }, // You might want to update order status too
+        { paymentStatus: "PAID" },
         { new: true }
       );
       if (!updatedOrder) {
         console.error("Order not found for updating paymentStatus!");
         return res.status(404).send("Order not found");
       }
+      await logActivity({
+      req,
+      userId: user._id,
+      action: "PAYMENT",
+      details: {
+        username: user.username,
+        email: user.email,
+      },
+    });
       console.log(`Order ${orderId} paymentStatus updated to Paid.`);
     } catch (err) {
       console.error("Error updating order payment status:", err);
@@ -273,7 +314,6 @@ const stripeWebhook = async (req, res) => {
 
   res.status(200).send("Webhook received");
 };
-
 
 module.exports = {
   createOrder,
