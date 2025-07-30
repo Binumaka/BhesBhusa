@@ -27,7 +27,7 @@ app.use("/api/clothes", clothesRoute);
 app.use("/api/wishlist", wishlistRoutes);
 app.use("/api/cart", shoppingRoutes);
 app.use("/api/order", orderRoutes);
-app.use("/api/activity-log", activitylogRoutes);
+app.use("/api/activitylog", activitylogRoutes);
 app.use('/clothes_image', express.static("clothes_image"));
 app.use('/uploads', express.static("uploads"));
 
