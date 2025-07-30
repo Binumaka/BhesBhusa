@@ -27,6 +27,7 @@ import RegisterPage from "./public/Register";
 
 import AdminProtectedRoute from "./private/routes/AdminProtectedRoute";
 import UserProtectedRoute from "./private/routes/UserProtectedRoute";
+import ActivityLogPage from "./admin/activityLog";
 
 // Axios config
 axios.defaults.baseURL = "https://localhost:3000";
@@ -73,6 +74,7 @@ function App() {
           <Route path="/AdminNavbar" element={<AdminNavbar />} />
           <Route path="/adminCloth" element={<AdminClothesList />} />
           <Route path="/addClothes" element={<AddClothes />} />
+          <Route path="/userList" element={<ActivityLogPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
