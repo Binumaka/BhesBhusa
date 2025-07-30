@@ -9,7 +9,6 @@ import {
   Mail,
   Package,
   Search,
-  Settings,
   ShoppingBag,
   TrendingUp,
   Truck,
@@ -18,6 +17,7 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import AdminNavbar from "./adminNavbar";
 
 const AdminDashboard = () => {
   const [clothes, setClothes] = useState([]);
@@ -32,9 +32,7 @@ const AdminDashboard = () => {
     const fetchData = async () => {
       try {
         const [clothRes, userRes, orderRes] = await Promise.all([
-          fetch("https://localhost:3000/api/clothes").then(
-            (res) => res.json()
-          ),
+          fetch("https://localhost:3000/api/clothes").then((res) => res.json()),
           fetch("https://localhost:3000/api/user").then((res) => res.json()),
           fetch("https://localhost:3000/api/order").then((res) => res.json()),
         ]);
@@ -196,7 +194,8 @@ const AdminDashboard = () => {
 
   if (currentView === "users") {
     return (
-      <div className="min-h-screen bg-slate-50">
+      <div className="flex">
+        <AdminNavbar />
         {/* Header */}
         <header className="bg-white shadow-sm border-b border-slate-200">
           <div className="px-8 py-6">
@@ -208,7 +207,7 @@ const AdminDashboard = () => {
                 >
                   <ArrowLeft className="h-6 w-6" />
                 </button>
-                <div>
+                <div className="flex flex-col">
                   <h1 className="text-3xl font-bold text-slate-900">
                     Users Management
                   </h1>
@@ -263,9 +262,7 @@ const AdminDashboard = () => {
                     <div className="w-16 h-16 rounded-full overflow-hidden bg-slate-100 border flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
                       {user?.image ? (
                         <img
-                          src={
-                            `https://localhost:3000/${user.image}`
-                          }
+                          src={`https://localhost:3000/${user.image}`}
                           alt="Profile"
                           className="w-full h-full object-cover"
                         />
@@ -336,34 +333,37 @@ const AdminDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      {/* Modern Header */}
-      <header className="bg-white shadow-sm border-b border-slate-200">
-        <div className="px-8 py-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-8">
-              <div>
-                <h1 className="text-3xl font-bold text-slate-900">
-                  Admin Dashboard
-                </h1>
-                <p className="text-slate-600 mt-1">
-                  Manage your e-commerce operations
-                </p>
+    <div className=" flex min-h-screen bg-slate-50">
+      <AdminNavbar />
+
+      <main className="w-full flex-1 overflow-y-auto h-screen bg-white p-6">
+        {/* Stats Grid */}
+        <div className="pb-8">
+          <header className="bg-white shadow-sm border-b border-slate-200">
+            <div className="px-8 py-6">
+              <div className="flex items-center justify-between">
+                <div className="flex flex-col items-center space-x-8">
+                  <div>
+                    <h1 className="text-3xl font-bold text-slate-900">
+                      Admin Dashboard
+                    </h1>
+                    <p className="text-slate-600 mt-1">
+                      Manage your e-commerce operations
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-4"></div>
               </div>
             </div>
-            <div className="flex items-center space-x-4">
-            </div>
-          </div>
+          </header>
         </div>
-      </header>
-
-      <main className="px-8 py-8">
-        {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 hover:shadow-md transition-shadow">
             <div className="flex items-center justify-between">
-              <div 
-              onClick={() => {navigate("/adminCloth")}}
+              <div
+                onClick={() => {
+                  navigate("/adminCloth");
+                }}
               >
                 <p className="text-sm font-medium text-slate-600 mb-2">
                   Products

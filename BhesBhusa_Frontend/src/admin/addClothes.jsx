@@ -109,9 +109,9 @@ const AddClothes = () => {
   };
 
   return (
-    <div className="ml-64 px-8 bg-gray-50 min-h-screen">
+    <div className="flex bg-gray-50 min-h-screen">
       <AdminNavbar />
-      <div className="max-w-full mx-auto">
+      <div className="w-full flex-1 overflow-y-auto h-screen bg-white">
         <div className="bg-white shadow-md overflow-hidden">
           <div className="bg-indigo-500 py-6 px-8">
             <h2 className="text-2xl font-bold text-white flex items-center">

@@ -46,17 +46,12 @@ const AdminClothesList = () => {
   };
 
   return (
-    <div className="ml-64 px-6 min-h-screen bg-gray-50">
+    <div className="flex">
       <AdminNavbar />
 
-      <div className="flex-1 p-8">
+      <div className="w-full flex-1 overflow-y-auto h-screen bg-white p-6">
         <div className="mx-auto ">
-          <img
-            src="/src/assets/images/BBlogo.png"
-            alt="Logo"
-            className="h-16 w-[90px]"
-          />
-          <div className="flex justify-between items-center mb-8">
+          <div className="flex justify-between items-center mt-6 mb-8">
             <h1 className="text-3xl font-bold font-dosis text-gray-800">
               Traditional Clothes Management
             </h1>
