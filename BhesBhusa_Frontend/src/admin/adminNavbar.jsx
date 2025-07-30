@@ -1,237 +1,241 @@
-import { useState } from "react";
-import { 
-  LayoutDashboard,
-  Map,
-  Package,
+import {
+  AlertCircle,
+  ArrowLeft,
+  Bell,
   Calendar,
+  CheckCircle,
+  Clock,
+  Filter,
+  Mail,
+  Package,
+  Search,
+  ShoppingBag,
+  TrendingUp,
+  Truck,
   Users,
-  UserCog,
-  LogOut,
+  XCircle,
   Menu,
-  X,
-  ChevronRight
+  Home,
+  Settings,
+  LogOut,
 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { useAuth } from "../private/context/AuthContext";
 
 const AdminNavbar = () => {
-  const [activeItem, setActiveItem] = useState("Dashboard");
-  const [isCollapsed, setIsCollapsed] = useState(false);
-  const [isMobileOpen, setIsMobileOpen] = useState(false);
-  const {logout} = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const {logout} = useAuth();
+
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   const handleLogout = () => {
     logout();
-    navigate("/login");
+    navigate('/login'); // or wherever you want to redirect after logout
   };
 
-  const handleNavigation = (path, name) => {
-    setActiveItem(name);
+  const handleNavigation = (path) => {
     setIsMobileOpen(false);
     navigate(path);
   };
 
-  const navItems = [
-    { name: "Dashboard", path: "/adminDashboard", icon: LayoutDashboard },
-    { name: "Clothes", path: "/adminCloth", icon: Map },
-    { name: "Packages", path: "/admintourpackages", icon: Package },
-    { name: "Orders", path: "/bookingAdmin", icon: Calendar },
-    { name: "User List", path: "/userlist", icon: Users },
+  const sidebarItems = [
+    { name: "Dashboard", icon: <TrendingUp className="w-5 h-5" />, path: "/adminDashboard" },
+    { name: "Add Clothes", icon: <Package className="w-5 h-5" />, path: "/addClothes" },
+    { name: "Clothes List", icon: <Calendar className="w-5 h-5" />, path: "/adminCloth" },
+    { name: "User", icon: <Users className="w-5 h-5" />, path: "/userList" },
   ];
 
   return (
-    <>
-      {/* Mobile Menu Button */}
-      <button
-        onClick={() => setIsMobileOpen(!isMobileOpen)}
-        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-white text-gray-800 rounded-lg shadow-lg border border-gray-200"
-      >
-        {isMobileOpen ? <X size={24} /> : <Menu size={24} />}
-      </button>
-
-      {/* Mobile Overlay */}
-      {isMobileOpen && (
-        <div 
-          className="lg:hidden fixed inset-0 bg-black/50 z-40"
-          onClick={() => setIsMobileOpen(false)}
-        />
-      )}
-
-      {/* Sidebar */}
-      <div className={`
-        fixed left-0 top-0 h-full bg-white
-        border-r border-gray-200 shadow-xl
-        transition-all duration-300 ease-in-out z-40
-        ${isCollapsed ? 'w-20' : 'w-72'}
-        ${isMobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
-      `}>
-        
-        {/* Header Section */}
-        <div className="p-6 border-b border-gray-200">
-          <div className="flex items-center justify-between">
-            {!isCollapsed && (
-              <div className="flex items-center space-x-3">
-                {/* Logo */}
-                <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
-                  <img 
-                    src="/api/placeholder/48/48" 
-                    alt="Logo" 
-                    className="w-8 h-8 rounded-lg object-cover"
-                    onError={(e) => {
-                      e.target.style.display = 'none';
-                      e.target.nextSibling.style.display = 'flex';
-                    }}
-                  />
-                  <UserCog className="w-6 h-6 text-white hidden" />
-                </div>
-                <div>
-                  <h1 className="text-xl font-bold text-gray-800">Admin Panel</h1>
-                  <p className="text-xs text-gray-500">Management System</p>
-                </div>
-              </div>
-            )}
-            
-            {isCollapsed && (
-              <div className="flex items-center justify-center w-full">
-                <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
-                  <img 
-                    src="/api/placeholder/48/48" 
-                    alt="Logo" 
-                    className="w-8 h-8 rounded object-contain"
-                    onError={(e) => {
-                      console.log('Collapsed logo failed to load:', e.target.src);
-                      e.target.style.display = 'none';
-                      e.target.nextElementSibling.style.display = 'flex';
-                    }}
-                  />
-                  <UserCog className="w-5 h-5 text-white" style={{display: 'none'}} />
-                </div>
-              </div>
-            )}
-            
-            {/* Collapse Toggle - Desktop Only */}
-            <button
-              onClick={() => setIsCollapsed(!isCollapsed)}
-              className="hidden lg:flex p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-all duration-200"
-            >
-              <ChevronRight className={`w-5 h-5 transition-transform duration-300 ${isCollapsed ? 'rotate-0' : 'rotate-180'}`} />
-            </button>
+    <div className="flex h-screen">
+      {/* Desktop Sidebar */}
+      <div className="bg-gradient-to-b from-slate-900 via-slate-600 to-slate-900 text-white w-72 shadow-2xl hidden md:flex flex-col">
+        {/* Header */}
+        <div className="p-6 border-b border-slate-700/50">
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+              <Home className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <h2 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                Admin Panel
+              </h2>
+              <p className="text-xs text-slate-400">Management System</p>
+            </div>
           </div>
         </div>
 
-        {/* Navigation Items */}
-        <div className="p-4 space-y-2 flex-1 overflow-y-auto">
-          {navItems.map((item, index) => {
-            const Icon = item.icon;
-            const isActive = activeItem === item.name;
-            
+        {/* Navigation */}
+        <div className="flex-1 p-4 space-y-2">
+          <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider px-3 py-2">
+            Navigation
+          </div>
+          {sidebarItems.map((item, index) => {
+            const isActive = location.pathname === item.path;
             return (
               <div
                 key={item.name}
-                onClick={() => handleNavigation(item.path, item.name)}
-                className={`
-                  group relative flex items-center px-4 py-3 rounded-xl cursor-pointer
-                  transition-all duration-300 ease-in-out
-                  ${isActive 
-                    ? 'bg-gradient-to-r from-blue-50 to-purple-50 text-gray-800 shadow-md border border-blue-200' 
-                    : 'text-gray-600 hover:text-gray-800 hover:bg-gray-50'
-                  }
-                `}
-                style={{ animationDelay: `${index * 50}ms` }}
+                className={`group relative flex items-center p-3 rounded-xl cursor-pointer transition-all duration-200 ${
+                  isActive
+                    ? "bg-gradient-to-r from-blue-600/20 to-purple-600/20 border border-blue-500/30 shadow-lg"
+                    : "hover:bg-slate-700/50 hover:translate-x-1"
+                }`}
+                onClick={() => handleNavigation(item.path)}
               >
-                {/* Active Indicator */}
                 {isActive && (
-                  <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-gradient-to-b from-blue-500 to-purple-600 rounded-r-full"></div>
+                  <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-blue-500 to-purple-500 rounded-r"></div>
                 )}
-                
-                {/* Icon */}
-                <div className={`
-                  flex items-center justify-center w-10 h-10 rounded-lg transition-all duration-300
-                  ${isActive 
-                    ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg' 
-                    : 'bg-gray-100 group-hover:bg-gray-200 text-gray-600'
-                  }
-                `}>
-                  <Icon className="w-5 h-5" />
+                <div
+                  className={`flex items-center justify-center w-10 h-10 rounded-lg transition-colors ${
+                    isActive
+                      ? "bg-gradient-to-r from-blue-500 to-purple-600 shadow-lg"
+                      : "bg-slate-700 group-hover:bg-slate-600"
+                  }`}
+                >
+                  {item.icon}
                 </div>
-                
-                {/* Label */}
-                {!isCollapsed && (
-                  <div className="ml-4 flex-1">
-                    <span className="font-medium text-sm">{item.name}</span>
-                  </div>
-                )}
-                
-                {/* Hover Effect */}
-                {!isActive && (
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-50/50 to-purple-50/50 opacity-0 group-hover:opacity-100 rounded-xl transition-opacity duration-300"></div>
-                )}
-                
-                {/* Tooltip for collapsed state */}
-                {isCollapsed && (
-                  <div className="absolute left-full ml-2 px-3 py-2 bg-gray-800 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50 border border-gray-600 shadow-lg">
+                <div className="ml-3 flex-1">
+                  <span className={`text-sm font-medium ${isActive ? "text-white" : "text-slate-300"}`}>
                     {item.name}
-                  </div>
+                  </span>
+                </div>
+                {isActive && (
+                  <CheckCircle className="w-4 h-4 text-blue-400" />
                 )}
               </div>
             );
           })}
         </div>
 
-        {/* Bottom Section - Logout */}
-        <div className="p-4 border-t border-gray-200">
-          <button
-            onClick={handleLogout}
-            className={`
-              group w-full flex items-center px-4 py-3 rounded-xl
-              text-red-500 hover:text-red-600 hover:bg-red-50 
-              transition-all duration-300 border border-transparent hover:border-red-200
-            `}
-          >
-            <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-red-50 group-hover:bg-red-100 transition-all duration-300">
-              <LogOut className="w-5 h-5" />
-            </div>
-            
-            {!isCollapsed && (
-              <span className="ml-4 font-medium text-sm">Logout</span>
-            )}
-            
-            {/* Tooltip for collapsed state */}
-            {isCollapsed && (
-              <div className="absolute left-full ml-2 px-3 py-2 bg-gray-800 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50 border border-gray-600 shadow-lg">
-                Logout
+        {/* Footer */}
+        <div className="p-4 border-t border-slate-700/50">
+          <div className="flex items-center justify-between p-3 bg-slate-800/50 rounded-xl">
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 bg-gradient-to-r from-green-400 to-blue-500 rounded-full flex items-center justify-center">
+                <span className="text-xs font-bold text-white">A</span>
               </div>
-            )}
-          </button>
+              <div>
+                <p className="text-sm font-medium text-white">Admin User</p>
+                <p className="text-xs text-slate-400">Online</p>
+              </div>
+            </div>
+            <button 
+              className="p-2 hover:bg-slate-700 rounded-lg transition-colors"
+              onClick={handleLogout}
+              title="Logout"
+            >
+              <LogOut className="w-4 h-4 text-slate-400" />
+            </button>
+          </div>
         </div>
-
-        {/* Decorative Elements */}
-        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
       </div>
 
-      {/* Main Content Spacer */}
-      <div className={`${isCollapsed ? 'lg:ml-20' : 'lg:ml-72'} transition-all duration-300`}>
-        {/* Your main content goes here */}
+      {/* Mobile Toggle Button */}
+      <div className="md:hidden fixed top-6 left-6 z-50">
+        <button
+          onClick={() => setIsMobileOpen(!isMobileOpen)}
+          className="flex items-center justify-center w-12 h-12 bg-gradient-to-r from-slate-800 to-slate-900 text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 border border-slate-700"
+        >
+          {isMobileOpen ? <XCircle className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+        </button>
       </div>
 
-      <style jsx>{`
-        @keyframes slideIn {
-          from {
-            opacity: 0;
-            transform: translateX(-20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0);
-          }
-        }
-        
-        .group {
-          animation: slideIn 0.3s ease-out forwards;
-        }
-      `}</style>
-    </>
+      {/* Mobile Sidebar Overlay */}
+      {isMobileOpen && (
+        <div className="md:hidden fixed inset-0 z-40">
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setIsMobileOpen(false)}></div>
+          <div className="absolute left-0 top-0 h-full w-80 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 shadow-2xl transform transition-transform duration-300">
+            {/* Mobile Header */}
+            <div className="p-6 border-b border-slate-700/50">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                    <Home className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <h2 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                      Admin Panel
+                    </h2>
+                    <p className="text-xs text-slate-400">Management System</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setIsMobileOpen(false)}
+                  className="p-2 hover:bg-slate-700 rounded-lg transition-colors"
+                >
+                  <XCircle className="w-5 h-5 text-slate-400" />
+                </button>
+              </div>
+            </div>
+
+            {/* Mobile Navigation */}
+            <div className="flex-1 p-4 space-y-2">
+              <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider px-3 py-2">
+                Navigation
+              </div>
+              {sidebarItems.map((item, index) => {
+                const isActive = location.pathname === item.path;
+                return (
+                  <div
+                    key={item.name}
+                    className={`group relative flex items-center p-3 rounded-xl cursor-pointer transition-all duration-200 ${
+                      isActive
+                        ? "bg-gradient-to-r from-blue-600/20 to-purple-600/20 border border-blue-500/30 shadow-lg"
+                        : "hover:bg-slate-700/50"
+                    }`}
+                    onClick={() => handleNavigation(item.path)}
+                  >
+                    {isActive && (
+                      <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-blue-500 to-purple-500 rounded-r"></div>
+                    )}
+                    <div
+                      className={`flex items-center justify-center w-10 h-10 rounded-lg transition-colors ${
+                        isActive
+                          ? "bg-gradient-to-r from-blue-500 to-purple-600 shadow-lg"
+                          : "bg-slate-700 group-hover:bg-slate-600"
+                      }`}
+                    >
+                      {item.icon}
+                    </div>
+                    <div className="ml-3 flex-1">
+                      <span className={`text-sm font-medium ${isActive ? "text-white" : "text-slate-300"}`}>
+                        {item.name}
+                      </span>
+                    </div>
+                    {isActive && (
+                      <CheckCircle className="w-4 h-4 text-blue-400" />
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Mobile Footer */}
+            <div className="p-4 border-t border-slate-700/50">
+              <div className="flex items-center justify-between p-3 bg-slate-800/50 rounded-xl">
+                <div className="flex items-center space-x-3">
+                  <div className="w-8 h-8 bg-gradient-to-r from-green-400 to-blue-500 rounded-full flex items-center justify-center">
+                    <span className="text-xs font-bold text-white">A</span>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-white">Admin User</p>
+                    <p className="text-xs text-slate-400">Online</p>
+                  </div>
+                </div>
+                <button 
+                  className="p-2 hover:bg-slate-700 rounded-lg transition-colors"
+                  onClick={handleLogout}
+                  title="Logout"
+                >
+                  <LogOut className="w-4 h-4 text-slate-400" />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 
