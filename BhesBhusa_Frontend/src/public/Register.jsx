@@ -12,6 +12,8 @@ import {
   AlertCircle
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import axios from "axios";
 
 const RegisterPage = () => {
   const [mounted, setMounted] = useState(false);
@@ -86,26 +88,20 @@ const RegisterPage = () => {
     try {
       const { username, email, password, confirmpassword } = formData;
 
-      // Original API call preserved - uncomment for actual use
-      // const res = await axios.post("/api/auth/register", {
-      //   username,
-      //   email,
-      //   password,
-      //   confirmpassword
-      // });
+      const response = await axios.post(`/api/auth/register`, {
+        username,
+        email,
+        password,
+        confirmpassword
+      });
 
-      // toast.success("OTP sent to your email.");
-      // localStorage.setItem("pendingEmail", email);
-      // navigate("/otp-verify");
-
-      // Demo simulation
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      console.log("Registration successful:", { username, email, password, confirmpassword });
-      console.log("OTP sent to email:", email);
+      toast.success("OTP sent to your email.");
+      localStorage.setItem("pendingEmail", email);
+      navigate("/otp-verify");
       
     } catch (err) {
       console.error("Registration failed:", err);
-      // toast.error(err.response?.data?.error || "Registration failed");
+      toast.error("Registration failed");
     } finally {
       setIsSubmitting(false);
     }
