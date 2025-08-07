@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Order = require("../model/checkoutModel");
 const Clothes = require("../model/clothesModel");
 const Stripe = require("stripe");
-const logActivity = require('../controller/activitylogController')
+const logActivity = require("../utils/activityLogger");
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 // Create new order from cart

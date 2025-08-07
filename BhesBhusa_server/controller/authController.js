@@ -358,9 +358,9 @@ const forgetPassword = async (req, res) => {
       return res.status(404).json({ error: "User not found" });
     }
 
-    if (!user.isVerified) {
-      return res.status(403).json({ error: "Please verify your email first" });
-    }
+    // if (!user.isVerified) {
+    //   return res.status(403).json({ error: "Please verify your email first" });
+    // }
 
     const resetCode = Math.floor(1000 + Math.random() * 9000).toString();
     user.resetCode = resetCode;
